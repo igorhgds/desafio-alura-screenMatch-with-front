@@ -1,12 +1,19 @@
 package igor.henrique.screenMatchAPI.cli;
 
+import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputDTO;
+import igor.henrique.screenMatchAPI.entities.Serie;
+import igor.henrique.screenMatchAPI.repositories.SerieRepository;
 import igor.henrique.screenMatchAPI.services.RequestAPI;
 import igor.henrique.screenMatchAPI.utils.ConvertInputJsonToObject;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @Component
+@RequiredArgsConstructor
 public class SeriesMenuCLI {
     private Scanner scanner = new Scanner(System.in);
 
@@ -14,6 +21,13 @@ public class SeriesMenuCLI {
     private ConvertInputJsonToObject converter = new ConvertInputJsonToObject();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=6585022c";
+
+    private SerieRepository repository;
+    private List<Serie> series = new ArrayList<>();
+
+    public SeriesMenuCLI(SerieRepository repository) {
+        this.repository = repository;
+    }
 
     public void showMenu(){
         var option = -1;
@@ -44,6 +58,18 @@ public class SeriesMenuCLI {
     }
 
     private void addNewSerie() {
+        GetDataInputDTO dataSerie = getDataSeries();
+        Serie serie = new Serie(dataSerie);
+        repository.save(serie);
+        System.out.println(dataSerie);
+    }
+
+    private GetDataInputDTO getDataSeries() {
+        System.out.println("Digite a série que deseja adicionar: ");
+        var titleSerie = scanner.nextLine();
+        var json = requestAPI.convertToObject(ENDERECO + titleSerie.replace(" ", "+" + API_KEY));
+        GetDataInputDTO data = converter.convertToObject(json, GetDataInputDTO.class);
+        return data;
     }
 }
 
