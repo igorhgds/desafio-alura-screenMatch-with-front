@@ -1,5 +1,6 @@
 package igor.henrique.screenMatchAPI.entities;
 
+import igor.henrique.screenMatchAPI.enums.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
