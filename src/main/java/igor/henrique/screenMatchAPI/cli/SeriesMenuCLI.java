@@ -1,6 +1,7 @@
 package igor.henrique.screenMatchAPI.cli;
 
 import igor.henrique.screenMatchAPI.services.RequestAPI;
+import igor.henrique.screenMatchAPI.utils.ConvertInputJsonToObject;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -8,6 +9,11 @@ import java.util.Scanner;
 @Component
 public class SeriesMenuCLI {
     private Scanner scanner = new Scanner(System.in);
+
+    private RequestAPI requestAPI = new RequestAPI();
+    private ConvertInputJsonToObject converter = new ConvertInputJsonToObject();
+    private final String ENDERECO = "https://www.omdbapi.com/?t=";
+    private final String API_KEY = "&apikey=6585022c";
 
     public void showMenu(){
         var option = -1;

@@ -31,5 +31,5 @@ public class Serie {
     private Category category;
     private String actors;
     private String poster;
-    private String synopsis;
+    private String plot;
 }
