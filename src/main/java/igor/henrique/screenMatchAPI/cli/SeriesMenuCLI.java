@@ -1,5 +1,6 @@
 package igor.henrique.screenMatchAPI.cli;
 
+import igor.henrique.screenMatchAPI.services.RequestAPI;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -27,7 +28,16 @@ public class SeriesMenuCLI {
             System.out.println(menu);
             option = scanner.nextInt();
             scanner.nextLine();
+
+            switch (option){
+                case 1:
+                    addNewSerie();
+                    break;
+            }
         }
+    }
+
+    private void addNewSerie() {
     }
 }
 
