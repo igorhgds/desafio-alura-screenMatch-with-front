@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 public class RequestAPI {
 
-    public String getData(String address) {
+    public String convertToObject(String address) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(address))
