@@ -12,7 +12,7 @@
 	<artifactId>screenMatchAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>desafio-alura-screenMatch-with-front</name>
-	<description>Criando API e Conectando a um projeto front-end base</description>
+	<description>Catálogo de Séries via API e linha de comando com Front-End</description>
 	<url/>
 	<licenses>
 		<license/>
