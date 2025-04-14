@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Entity
@@ -40,14 +41,22 @@ public class Serie {
     public Serie(GetDataInputDTO dataSerie){
         this.title = dataSerie.title();
         this.totalSeasons = dataSerie.totalSeasons();
-        this.rating = OptionalDouble.of(Double.parseDouble(dataSerie.rating())).orElse(0);
-
-        String rawCategory = dataSerie.catogory();
-        if (rawCategory != null && !rawCategory.isBlank()) {
-            this.category = Category.fromString(rawCategory.split(",")[0].trim());
-        } else {
-            this.category = null; // ou algum valor padrão
-        }
+        this.rating = Optional.ofNullable(dataSerie.rating())
+                .map(String::trim)
+                .filter(s -> !s.isEmpty() && !s.equalsIgnoreCase("N/A"))
+                .map(s -> {
+                    try {
+                        return Double.parseDouble(s);
+                    } catch (NumberFormatException e) {
+                        return 0.0;
+                    }
+                })
+                .orElse(0.0);
+        this.category = Optional.ofNullable(dataSerie.category())
+                .filter(c -> !c.isBlank())
+                .map(c -> c.split(",")[0].trim())
+                .map(Category::fromString)
+                .orElse(null); // ou Category.DEFAULT
 
         this.actors = dataSerie.actors();
         this.poster = dataSerie.poster();

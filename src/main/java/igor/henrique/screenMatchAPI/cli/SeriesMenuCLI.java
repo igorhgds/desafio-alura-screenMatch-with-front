@@ -67,7 +67,7 @@ public class SeriesMenuCLI {
     private GetDataInputDTO getDataSeries() {
         System.out.println("Digite a série que deseja adicionar: ");
         var titleSerie = scanner.nextLine();
-        var json = requestAPI.convertToObject(ENDERECO + titleSerie.replace(" ", "+" + API_KEY));
+        var json = requestAPI.convertToObject(ENDERECO + titleSerie.replace(" ", "+") + API_KEY);
         GetDataInputDTO data = converter.convertToObject(json, GetDataInputDTO.class);
         return data;
     }
