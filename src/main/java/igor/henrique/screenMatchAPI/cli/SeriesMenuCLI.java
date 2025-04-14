@@ -115,7 +115,6 @@ public class SeriesMenuCLI {
 
     }
 
-
     private void listSeriesSearched() {
         series = repository.findAll();
         series.stream()
