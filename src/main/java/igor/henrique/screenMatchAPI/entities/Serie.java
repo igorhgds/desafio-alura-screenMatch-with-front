@@ -2,18 +2,23 @@ package igor.henrique.screenMatchAPI.entities;
 
 import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputDTO;
 import igor.henrique.screenMatchAPI.enums.Category;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
@@ -35,6 +40,9 @@ public class Serie {
     private String actors;
     private String poster;
     private String plot;
+
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Episodio> episodes = new ArrayList<>();
 
     public Serie() {}
 
@@ -67,12 +75,12 @@ public class Serie {
     @Override
     public String toString() {
         return
-                "genero=" + category +
-                        ", titulo='" + title + '\'' +
-                        ", totalTemporadas=" + totalSeasons +
-                        ", avaliacao=" + rating +
-                        ", atores='" + actors + '\'' +
-                        ", poster='" + poster + '\'' +
-                        ", sinopse='" + plot + '\'';
+                " Titulo= " + title +
+                        ", genero= " + category + '\'' +
+                        ", totalTemporadas= " + totalSeasons +
+                        ", avaliacao= " + rating +
+                        ", atores= " + actors + '\'' +
+                        ", poster= " + poster + '\'' +
+                        ", sinopse= " + plot + '\'';
     }
 }
