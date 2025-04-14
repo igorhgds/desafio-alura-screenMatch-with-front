@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,9 +54,16 @@ public class SeriesMenuCLI {
                 case 1:
                     addNewSerie();
                     break;
+                case 2:
+                    addEpisodes();
+                    break;
+                case 3:
+                    listSeriesSearched();
+                    break;
             }
         }
     }
+
 
     private void addNewSerie() {
         GetDataInputDTO dataSerie = getDataSeries();
@@ -70,6 +78,18 @@ public class SeriesMenuCLI {
         var json = requestAPI.convertToObject(ENDERECO + titleSerie.replace(" ", "+") + API_KEY);
         GetDataInputDTO data = converter.convertToObject(json, GetDataInputDTO.class);
         return data;
+    }
+
+    private void addEpisodes(){
+
+    }
+
+
+    private void listSeriesSearched() {
+        series = repository.findAll();
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getTitle))
+                .forEach(System.out::println);
     }
 }
 
