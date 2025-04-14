@@ -4,6 +4,7 @@ import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputSerieDTO;
 import igor.henrique.screenMatchAPI.dtos.temporada.input.GetDataInputTemporadaDTO;
 import igor.henrique.screenMatchAPI.entities.Episodio;
 import igor.henrique.screenMatchAPI.entities.Serie;
+import igor.henrique.screenMatchAPI.enums.Category;
 import igor.henrique.screenMatchAPI.repositories.SerieRepository;
 import igor.henrique.screenMatchAPI.services.RequestAPI;
 import igor.henrique.screenMatchAPI.utils.ConvertInputJsonToObject;
@@ -45,7 +46,7 @@ public class SeriesMenuCLI {
                     5 - Buscar Série Salva por Título
                     6 - Filtrar Séries por Avaliação
                     7 - Top 5 Séries
-                    8 - Top 5 Epsodios por Série
+                    8 - Top 5 Episodios por Série
                     
                     0 - Sair
                     """;
@@ -64,10 +65,23 @@ public class SeriesMenuCLI {
                 case 3:
                     listSeriesSearched();
                     break;
+                case 4:
+                    listSeriesSearchedCategory();
+                    break;
+                case 5:
+                    searchSavedSeriesByTitle();
+                    break;
+                case 6:
+                    filterSeriesByRating();
+                    break;
+                case 7:
+                    top5Series();
+                    break;
+                case 8:
+                    top5EpisodesBySerie();
             }
         }
     }
-
 
     private void addNewSerie() {
         GetDataInputSerieDTO dataSerie = getDataSeries();
@@ -120,6 +134,27 @@ public class SeriesMenuCLI {
         series.stream()
                 .sorted(Comparator.comparing(Serie::getTitle))
                 .forEach(System.out::println);
+    }
+
+    private void listSeriesSearchedCategory() {
+        System.out.println("Deseja buscar séries de que categoria/gênero? ");
+        var categoryName = scanner.nextLine();
+        Category category = Category.fromPortugues(categoryName);
+        List<Serie> seriesByCategory = repository.findByCategory(category);
+        System.out.println("Séries da categoria: " + category);
+        seriesByCategory.forEach(System.out::println);
+    }
+
+    private void searchSavedSeriesByTitle() {
+    }
+
+    private void filterSeriesByRating() {
+    }
+
+    private void top5Series() {
+    }
+
+    private void top5EpisodesBySerie() {
     }
 }
 
