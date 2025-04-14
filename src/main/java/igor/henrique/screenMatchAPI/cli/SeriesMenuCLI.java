@@ -30,6 +30,7 @@ public class SeriesMenuCLI {
 
     private SerieRepository repository;
     private List<Serie> series = new ArrayList<>();
+    private Optional<Serie> searchSerie;
 
     public SeriesMenuCLI(SerieRepository repository) {
         this.repository = repository;
@@ -79,6 +80,11 @@ public class SeriesMenuCLI {
                     break;
                 case 8:
                     top5EpisodesBySerie();
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção Inválida!");
             }
         }
     }
@@ -146,6 +152,15 @@ public class SeriesMenuCLI {
     }
 
     private void searchSavedSeriesByTitle() {
+        System.out.println("Escolha uma série pelo nome: ");
+        var titleSerie = scanner.nextLine();
+        searchSerie = repository.findByTitleContainingIgnoreCase(titleSerie);
+
+        if(searchSerie.isPresent()){
+            System.out.println("Dados da série: " + searchSerie.get());
+        }else {
+            System.out.println("Série não encontrada!");
+        }
     }
 
     private void filterSeriesByRating() {
