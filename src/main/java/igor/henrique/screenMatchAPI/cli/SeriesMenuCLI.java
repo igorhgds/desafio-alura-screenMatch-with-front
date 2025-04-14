@@ -86,6 +86,7 @@ public class SeriesMenuCLI {
                     break;
                 default:
                     System.out.println("Opção Inválida!");
+                    break;
             }
         }
     }
@@ -173,9 +174,19 @@ public class SeriesMenuCLI {
     }
 
     private void top5Series() {
+        List<Serie> topSeries = repository.findTop5ByOrderByRatingDesc();
+        topSeries.forEach( s -> System.out.println(s.getTitle() + " avaliação: " + s.getRating()));
     }
 
     private void top5EpisodesBySerie() {
+        searchSavedSeriesByTitle();
+        if(searchSerie.isPresent()){
+            Serie serie = searchSerie.get();
+            List<Episodio> topEpisodes = repository.topEpisodesBySerie(serie);
+            topEpisodes.forEach(e ->
+                    System.out.printf("Série: %s - Temporada %s - Episódio %s - %s Avaliação %s \n", e.getSerie().getTitle(), e.getSeason(), e.getEpisodeNumber(), e.getTitle(), e.getRating()));
+
+        }
     }
 }
 
