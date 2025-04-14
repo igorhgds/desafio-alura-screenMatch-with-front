@@ -80,6 +80,7 @@ public class SeriesMenuCLI {
                     break;
                 case 8:
                     top5EpisodesBySerie();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -164,6 +165,11 @@ public class SeriesMenuCLI {
     }
 
     private void filterSeriesByRating() {
+        System.out.println("Quer séries a partir de qual avaliação? ");
+        var rating = scanner.nextDouble();
+        List<Serie> seriesFilter = repository.findByRatingGreaterThanEqual(rating);
+        System.out.println("*** Séries Filtradas ***");
+        seriesFilter.forEach(s -> System.out.println(s.getTitle() + " - " + s.getRating()));
     }
 
     private void top5Series() {
