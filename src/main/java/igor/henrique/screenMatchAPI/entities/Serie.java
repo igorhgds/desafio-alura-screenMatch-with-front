@@ -1,6 +1,6 @@
 package igor.henrique.screenMatchAPI.entities;
 
-import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputDTO;
+import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputSerieDTO;
 import igor.henrique.screenMatchAPI.enums.Category;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -14,13 +14,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
 
 @Entity
 @Getter
@@ -46,7 +44,7 @@ public class Serie {
 
     public Serie() {}
 
-    public Serie(GetDataInputDTO dataSerie){
+    public Serie(GetDataInputSerieDTO dataSerie){
         this.title = dataSerie.title();
         this.totalSeasons = dataSerie.totalSeasons();
         this.rating = Optional.ofNullable(dataSerie.rating())

@@ -1,6 +1,8 @@
 package igor.henrique.screenMatchAPI.cli;
 
-import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputDTO;
+import igor.henrique.screenMatchAPI.dtos.serie.input.GetDataInputSerieDTO;
+import igor.henrique.screenMatchAPI.dtos.temporada.input.GetDataInputTemporadaDTO;
+import igor.henrique.screenMatchAPI.entities.Episodio;
 import igor.henrique.screenMatchAPI.entities.Serie;
 import igor.henrique.screenMatchAPI.repositories.SerieRepository;
 import igor.henrique.screenMatchAPI.services.RequestAPI;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -66,21 +70,48 @@ public class SeriesMenuCLI {
 
 
     private void addNewSerie() {
-        GetDataInputDTO dataSerie = getDataSeries();
+        GetDataInputSerieDTO dataSerie = getDataSeries();
         Serie serie = new Serie(dataSerie);
         repository.save(serie);
         System.out.println(dataSerie);
     }
 
-    private GetDataInputDTO getDataSeries() {
+    private GetDataInputSerieDTO getDataSeries() {
         System.out.println("Digite a série que deseja adicionar: ");
         var titleSerie = scanner.nextLine();
         var json = requestAPI.convertToObject(ENDERECO + titleSerie.replace(" ", "+") + API_KEY);
-        GetDataInputDTO data = converter.convertToObject(json, GetDataInputDTO.class);
+        GetDataInputSerieDTO data = converter.convertToObject(json, GetDataInputSerieDTO.class);
         return data;
     }
 
     private void addEpisodes(){
+        listSeriesSearched();
+        System.out.println("Escolha uma série para buscar os episódios:");
+        var titleSerie = scanner.nextLine();
+
+        Optional<Serie> serie = repository.findByTitleContainingIgnoreCase(titleSerie);
+
+        if(serie.isPresent()){
+            var serieSearched = serie.get();
+            List<GetDataInputTemporadaDTO> seasons = new ArrayList<>();
+
+            for (int i = 1; i <= serieSearched.getTotalSeasons(); i++){
+                var json = requestAPI.convertToObject(ENDERECO + serieSearched.getTitle().replace(" ", "+") + "&season=" + i + API_KEY);
+                GetDataInputTemporadaDTO data = converter.convertToObject(json, GetDataInputTemporadaDTO.class);
+                seasons.add(data);
+            }
+            seasons.forEach(System.out::println);
+
+            List<Episodio> episodes = seasons.stream()
+                    .flatMap(d -> d.episodes().stream()
+                            .map(e -> new Episodio(d.number(), e)))
+                    .collect(Collectors.toList());
+
+            serieSearched.setEpisodes(episodes);
+            repository.save(serieSearched);
+        }else {
+            System.out.println("Série não encontrada! ");
+        }
 
     }
 

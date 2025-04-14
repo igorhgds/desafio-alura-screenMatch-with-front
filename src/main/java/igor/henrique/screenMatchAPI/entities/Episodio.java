@@ -1,6 +1,6 @@
 package igor.henrique.screenMatchAPI.entities;
 
-import igor.henrique.screenMatchAPI.dtos.episodio.input.GetDataInputDTO;
+import igor.henrique.screenMatchAPI.dtos.episodio.input.GetDataInputEpisodioDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +34,7 @@ public class Episodio {
     @ManyToOne
     private Serie serie;
 
-    public Episodio(Integer seasonNumber, GetDataInputDTO dataEpisodes){
+    public Episodio(Integer seasonNumber, GetDataInputEpisodioDTO dataEpisodes){
         this.season = seasonNumber;
         this.title = dataEpisodes.title();
         this.episodeNumber = dataEpisodes.episodeNumber();
