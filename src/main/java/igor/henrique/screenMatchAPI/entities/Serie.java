@@ -39,7 +39,7 @@ public class Serie {
     private String poster;
     private String plot;
 
-    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Episodio> episodes = new ArrayList<>();
 
     public Serie() {}

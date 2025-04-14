@@ -2,6 +2,7 @@ package igor.henrique.screenMatchAPI.entities;
 
 import igor.henrique.screenMatchAPI.dtos.episodio.input.GetDataInputEpisodioDTO;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,8 @@ public class Episodio {
     private Integer episodeNumber;
     private Double rating;
     private LocalDate releaseDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "serie_id", nullable = false)
     private Serie serie;
 
     public Episodio(Integer seasonNumber, GetDataInputEpisodioDTO dataEpisodes){
