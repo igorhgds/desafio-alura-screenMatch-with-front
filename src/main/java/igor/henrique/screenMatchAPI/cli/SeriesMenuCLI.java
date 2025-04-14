@@ -129,6 +129,10 @@ public class SeriesMenuCLI {
                             .map(e -> new Episodio(d.number(), e)))
                     .collect(Collectors.toList());
 
+            for (Episodio episodio : episodes){
+                episodio.setSerie(serieSearched);
+            }
+
             serieSearched.setEpisodes(episodes);
             repository.save(serieSearched);
         }else {
