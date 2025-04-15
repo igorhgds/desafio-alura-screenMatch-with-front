@@ -10,7 +10,7 @@ const fichaDescricao = document.getElementById('ficha-descricao');
 function carregarTemporadas() {
     getDados(`/series/${serieId}/temporadas/todas`)
         .then(data => {
-            const temporadasUnicas = [...new Set(data.map(temporada => temporada.temporada))];
+            const temporadasUnicas = [...new Set(data.map(temporada => temporada.season))];
             listaTemporadas.innerHTML = ''; // Limpa as opções existentes
 
             const optionDefault = document.createElement('option');
@@ -44,17 +44,17 @@ function carregarTemporadas() {
 function carregarEpisodios() {
     getDados(`/series/${serieId}/temporadas/${listaTemporadas.value}`)
         .then(data => {
-            const temporadasUnicas = [...new Set(data.map(temporada => temporada.temporada))];
+            const temporadasUnicas = [...new Set(data.map(temporada => temporada.season))];
             fichaSerie.innerHTML = ''; 
             temporadasUnicas.forEach(temporada => {
                 const ul = document.createElement('ul');
                 ul.className = 'episodios-lista';
 
-                const episodiosTemporadaAtual = data.filter(serie => serie.temporada === temporada);
+                const episodiosTemporadaAtual = data.filter(serie => serie.season === temporada);
 
                 const listaHTML = episodiosTemporadaAtual.map(serie => `
                     <li>
-                        ${serie.numeroEpisodio} - ${serie.titulo}
+                        ${serie.episodeNumber} - ${serie.title}
                     </li>
                 `).join('');
                 ul.innerHTML = listaHTML;
@@ -82,7 +82,7 @@ function carregarTopEpisodios() {
 
             const listaHTML = data.map(serie => `
                 <li>
-                    Episódio ${serie.numeroEpisodio} - Temporada ${serie.temporada} - ${serie.titulo}
+                    Episódio ${serie.episodeNumber} - Temporada ${serie.season} - ${serie.title}
                 </li>
             `).join('');
             ul.innerHTML = listaHTML;
@@ -104,13 +104,13 @@ function carregarInfoSerie() {
     getDados(`/series/${serieId}`)
         .then(data => {
             fichaDescricao.innerHTML = `
-                <img src="${data.poster}" alt="${data.titulo}" />
+                <img src="${data.poster}" alt="${data.title}" />
                 <div>
-                    <h2>${data.titulo}</h2>
+                    <h2>${data.title}</h2>
                     <div class="descricao-texto">
-                        <p><b>Média de avaliações:</b> ${data.avaliacao}</p>
-                        <p>${data.sinopse}</p>
-                        <p><b>Estrelando:</b> ${data.atores}</p>
+                        <p><b>Média de avaliações:</b> ${data.rating}</p>
+                        <p>${data.plot}</p>
+                        <p><b>Estrelando:</b> ${data.actors}</p>
                     </div>
                 </div>
             `;
@@ -121,9 +121,17 @@ function carregarInfoSerie() {
 }
 
 // Adiciona ouvinte de evento para o elemento select
-listaTemporadas.addEventListener('change', carregarEpisodios);
-listaTemporadas.addEventListener('change', carregarTopEpisodios);
+listaTemporadas.addEventListener('change', () => {
+    const valorSelecionado = listaTemporadas.value;
 
+    fichaSerie.innerHTML = ''; // Limpa o conteúdo antes de carregar nova exibição
+
+    if (valorSelecionado === 'top') {
+        carregarTopEpisodios();
+    } else if (valorSelecionado === 'todas' || valorSelecionado !== '') {
+        carregarEpisodios();
+    }
+});
 
 // Carrega as informações da série e as temporadas quando a página carrega
 carregarInfoSerie();
