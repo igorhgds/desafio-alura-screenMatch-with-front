@@ -17,18 +17,18 @@ public class SerieController {
     private SerieService service;
 
     @GetMapping
-    public List<OutputSerieDTO> obterSeries() {
-        return service.obterTodasAsSeries();
+    public List<OutputSerieDTO> getSeries() {
+        return service.getAllSeries();
     }
 
     @GetMapping("/top5")
-    public List<OutputSerieDTO> obterTop5Series() {
-        return service.obterTop5Series();
+    public List<OutputSerieDTO> getTop5Series() {
+        return service.getTop5Series();
     }
 
     @GetMapping("/lancamentos")
-    public List<OutputSerieDTO> obterLancamentos() {
-        return service.obterLancamentos();
+    public List<OutputSerieDTO> getReleases() {
+        return service.getReleases();
 
     }
 }
