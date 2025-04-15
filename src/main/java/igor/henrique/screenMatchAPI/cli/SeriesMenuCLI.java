@@ -40,6 +40,7 @@ public class SeriesMenuCLI {
         var option = -1;
         while(option != 0){
             var menu = """
+                    *** MENU ***
                     1 - Adicionar Nova Série
                     2 - Adicionar Episódios
                     3 - Listar Séries Salvas
@@ -83,10 +84,10 @@ public class SeriesMenuCLI {
                     break;
                 case 0:
                     System.out.println("Saindo...");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Opção Inválida!");
-                    break;
             }
         }
     }
