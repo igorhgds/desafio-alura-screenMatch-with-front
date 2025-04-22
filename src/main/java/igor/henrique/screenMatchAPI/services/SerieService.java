@@ -4,6 +4,7 @@ import igor.henrique.screenMatchAPI.dtos.episodio.output.OutputEpisodioDTO;
 import igor.henrique.screenMatchAPI.dtos.serie.output.OutputSerieDTO;
 import igor.henrique.screenMatchAPI.entities.Serie;
 import igor.henrique.screenMatchAPI.enums.Category;
+import igor.henrique.screenMatchAPI.mappers.SerieMapper;
 import igor.henrique.screenMatchAPI.repositories.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,29 +20,25 @@ public class SerieService {
     private SerieRepository repository;
 
     public List<OutputSerieDTO> getAllSeries() {
-        return converterData(repository.findAll());
+        return SerieMapper.toDTOList(repository.findAll());
     }
 
     public List<OutputSerieDTO> getTop5Series() {
-        return converterData(repository.findTop5ByOrderByRatingDesc());
+        return SerieMapper.toDTOList(repository.findTop5ByOrderByRatingDesc());
     }
 
     public List<OutputSerieDTO> getReleases() {
-        return converterData(repository.recentReleases());
+        return SerieMapper.toDTOList(repository.recentReleases());
     }
 
     public OutputSerieDTO getById(Long id) {
         Optional<Serie> serie = repository.findById(id);
-        if (serie.isPresent()){
-            Serie s = serie.get();
-            return new OutputSerieDTO(s.getId(), s.getTitle(), s.getTotalSeasons(), s.getRating(), s.getCategory(), s.getActors(), s.getPoster(), s.getPlot());
-        }
-        return null;
+        return serie.map(SerieMapper::toDTO).orElse(null);
     }
 
     public List<OutputEpisodioDTO> getAllSeasons(Long id) {
         Optional<Serie> serie = repository.findById(id);
-        if (serie.isPresent()){
+        if (serie.isPresent()) {
             Serie s = serie.get();
             return s.getEpisodes().stream()
                     .map(e -> new OutputEpisodioDTO(e.getSeason(), e.getEpisodeNumber(), e.getTitle()))
@@ -59,7 +56,7 @@ public class SerieService {
 
     public List<OutputSerieDTO> getSeriesByCategory(String genero) {
         Category category = Category.fromPortugues(genero);
-        return converterData(repository.findByCategory(category));
+        return SerieMapper.toDTOList(repository.findByCategory(category));
     }
 
     public List<OutputEpisodioDTO> getTopEpisodes(Long id) {
@@ -67,12 +64,6 @@ public class SerieService {
         return repository.topEpisodesBySerie(serie)
                 .stream()
                 .map(e -> new OutputEpisodioDTO(e.getSeason(), e.getEpisodeNumber(), e.getTitle()))
-                .collect(Collectors.toList());
-    }
-
-    private List<OutputSerieDTO> converterData(List<Serie> series){
-        return series.stream()
-                .map(s -> new OutputSerieDTO(s.getId(), s.getTitle(), s.getTotalSeasons(), s.getRating(), s.getCategory(), s.getActors(), s.getPoster(), s.getPlot()))
                 .collect(Collectors.toList());
     }
 }
